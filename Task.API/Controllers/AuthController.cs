@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Task.Application.Features.Auth.Commands.Login;
 using Task.Application.Features.Auth.Commands.Register;
 
 namespace Task.API.Controllers
@@ -25,12 +26,18 @@ namespace Task.API.Controllers
 
             if (!result.Succeeded)
             {
-                // Hataları listele
                 var errors = result.Errors.Select(e => e.Description);
                 return BadRequest(new { Errors = errors });
             }
 
             return Ok(new { Message = "Kullanıcı başarıyla kaydedildi." });
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginCommandRequest request)
+        {
+                var result = await _mediator.Send(request);
+                return Ok(result); 
         }
     }
 }
