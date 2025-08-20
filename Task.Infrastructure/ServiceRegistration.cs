@@ -2,8 +2,12 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Task.Application.Interfaces.Repositories;
+using Task.Application.Interfaces.UnitOfWork;
 using Task.Core.Entities;
 using Task.Infrastructure.Persistance.Context;
+using Task.Infrastructure.Persistance.Repositories;
+using Task.Infrastructure.Persistance.UnitOfWorks;
 
 namespace Task.Infrastructure
 {
@@ -12,6 +16,9 @@ namespace Task.Infrastructure
         public static void AddInfrastructureServices(this IServiceCollection services,IConfiguration configuration)
         {
             services.AddDbContext<AppDbContext>(options => options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped(typeof(IReadRepository<>), typeof(ReadRepository<>));
+            services.AddScoped(typeof(IWriteRepository<>), typeof(WriteRepository<>));
 
             services.AddIdentityCore<AppUser>(options =>
             {
