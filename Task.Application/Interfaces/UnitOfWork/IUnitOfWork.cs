@@ -11,7 +11,7 @@ namespace Task.Application.Interfaces.UnitOfWork
     {
         IReadRepository<T> GetReadRepository<T>() where T : class;
         IWriteRepository<T> GetWriteRepository<T>() where T : class;
-        Task<int> SaveAsync();
+        Task<int> SaveAsync(CancellationToken cancellationToken = default);
         int Save();
     }
 }
