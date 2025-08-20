@@ -23,6 +23,6 @@ namespace Task.Infrastructure.Persistance.UnitOfWorks
         public int Save() => dbContext.SaveChanges();
         
 
-        public async Task<int> SaveAsync() => await dbContext.SaveChangesAsync();
+        public async Task<int> SaveAsync(CancellationToken cancellationToken = default) => await dbContext.SaveChangesAsync();
     }
 }
