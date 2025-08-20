@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,12 +12,17 @@ namespace Task.Application
 {
     public static class ServiceRegistration
     {
-        public static void AddApplicationService(this IServiceCollection services)
+        public static void AddApplicationService(this IServiceCollection services,IConfiguration configuration)
         {
             var assembly = Assembly.GetExecutingAssembly();
 
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(assembly));
 
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = configuration["CacheSettings:ConnectionString"];
+                options.InstanceName = "BackendTask_";
+            });
         }
     }
 }
